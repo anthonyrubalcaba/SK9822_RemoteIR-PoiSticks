@@ -84,7 +84,7 @@ IRdecode myDecoder;   //create decoder
 
 // -------------------------------------------------------------------------
 #define NUM_LEDS_TOTAL 177
-#define NUM_LEDS 37
+#define NUM_LEDS 50
 
 // bit banging
 //Adafruit_DotStar strip = Adafruit_DotStar(NUM_LEDS, LED_DATA_PIN, LED_CLOCK_PIN, DOTSTAR_BRG);
@@ -118,7 +118,7 @@ void setup() {
 uint32_t lastImageTime = 0L, // Time of last image change
          lastLineTime  = 0L;
 // shortcut single pattern
-uint8_t  imageNumber   = 1,  // Current image being displayed
+uint8_t  imageNumber   = 0,  // Current image being displayed
          imageType,          // Image type: PALETTE[1,4,8] or TRUECOLOR
         *imagePalette,       // -> palette data in PROGMEM
         *imagePixels,        // -> pixel data in PROGMEM
@@ -236,7 +236,7 @@ void loop() {
         g = pgm_read_byte(ptr++);
         b = pgm_read_byte(ptr++);
         strip.setPixelColor(pixelNum, r, g, b);
-        strip.setPixelColor((NUM_LEDS_TOTAL - pixelNum), r, g, b);
+        //strip.setPixelColor((NUM_LEDS_TOTAL - pixelNum), r, g, b);
       }
       break;
     }
