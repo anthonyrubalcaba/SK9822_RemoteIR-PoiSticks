@@ -1,0 +1,1 @@
+python convert.py 36pxImages/*.* > ../graphics.h

@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "convert.py", line 192, in <module>
+    mA += paletteCurrent[image.pixels[x, y]]
+IndexError: list index out of range

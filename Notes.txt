@@ -1,0 +1,100 @@
+
+2020/12/15: Using this code for 50 px SK9822 SMD2020 on Trinket M0
+
+// run ubuntu app 
+~/staff.bash
+cd /mnt/c/Users/anthony/Google\ Drive/Maker/Arduino/Sketches/POV/DotStar/SK9822_RemoteIR-Staff/Images/
+python convert.py 144pxImages/*.* > ../graphics.h
+
+~/poi.bash
+cd /mnt/c/Users/anthony/Google\ Drive/Maker/Arduino/Sketches/POV/DotStar/SK9822_RemoteIR-PoiSticks/Images/
+python convert.py 36pxImages/*.* > ../graphics.h
+
+6/29: 
+the issue wasn't that the CPU was too slow, it was bitbanging the data/clock lines. Switching to native SPI resolved the lag. 
+
+####################
+	Issue 
+		while(((t = micros()) - lastLineTime) < lineInterval) { 
+			// This code never runs because micros()-lastLineTime is never less than lineInterval. 
+			// t=3424559731;
+			// lastLineTime=3424552869;
+			// ((t = micros()) - lastLineTime)=x;
+			// lineInterval=133
+		}
+  
+  
+  
+  
+  options
+	copy functions from original button handling in loop() into IRinterrupt()
+			- this would bypass the intended timing for lines 
+	figure out why IR code isn't working in primary loop()
+			- because  micros()-lastLineTime is never less than lineInterval
+	
+	it looks like the code might be running slower than originally intended. 
+	check the CPU speed of Trinket M0 (currently using) vs Teensy 3.2 (code intended for teensy)
+	Teensy: 	72 MHz, 64K RAM
+	Trinket M0: 48 MHz, 32K RAM
+	Teensy LC: 	48 MHZ, 8K RAM 
+  
+  
+  ordered 3 teensy 3.2: 2 for poi, 1 for staff 
+
+#################### IR Code
+
+volatile uint16_t irCode = None; // Last valid IR code received
+
+#################### Line Times
+
+uint32_t lastImageTime = 0L, // Time of last image change
+         lastLineTime  = 0L;
+		 
+ 
+
+// Microseconds per line for various speed settings
+const uint16_t PROGMEM lineTable[] = { // 375 * 2^(n/3)
+  1000000L /  375, // 375 lines/sec = slowest
+  1000000L /  472,
+  1000000L /  595,
+  1000000L /  750, // 750 lines/sec = mid
+  1000000L /  945,
+  1000000L / 1191,
+  1000000L / 1500  // 1500 lines/sec = fastest
+};
+uint8_t  lineIntervalIndex = 3;
+uint16_t lineInterval      = 1000000L / 750;
+
+
+  while(((t = micros()) - lastLineTime) < lineInterval) { 
+	}
+
+
+  lastLineTime = t;
+  
+  
+############################## Brightness
+
+
+
+
+const uint8_t PROGMEM brightness[] = { 15, 31, 63, 127, 255 };
+uint8_t bLevel = sizeof(brightness) - 1;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
